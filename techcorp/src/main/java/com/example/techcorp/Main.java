@@ -7,10 +7,11 @@ import com.example.techcorp.ui.ConsoleUI;
 public class Main {
     public static void main(String[] args) {
 
-        Company company = new Company("TechCorp");
+        Company company = new Company("TechCorp", 55000);
 
-        Employee a = new Employee("Anna", 5);
-        Employee b = new Employee("Piotr", 4);
+        Employee a = new DataEngineer("Anna", 5, 7000);
+        Employee b = new MLOpsEngineer("Leo", 6, 8000);
+        Employee c = new ProjectManager("Sara", 4, 9000);
 
         company.hire(a);
         company.hire(b);

@@ -1,6 +1,10 @@
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/Main.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Company.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/DataEngineer.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Employee.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/MLOpsEngineer.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Project.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/ProjectManager.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/SOCAnalyst.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/engine/GameEngine.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/ui/ConsoleUI.java

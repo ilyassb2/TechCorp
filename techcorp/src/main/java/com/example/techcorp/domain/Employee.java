@@ -1,19 +1,24 @@
 package com.example.techcorp.domain;
 
-public class Employee {
-    private String name;
-    private int skill;
+public abstract class Employee {
 
-    public Employee(String name, int skill) {
+    protected String name;
+    protected int skill;
+    protected double salary;
+
+    public Employee(String name, int skill, double salary) {
         this.name = name;
         this.skill = skill;
+        this.salary = salary;
     }
 
-    public int work() {
-        return skill;
-    }
+    public abstract int work();
 
     public String getName() {
         return name;
+    }
+
+    public double getSalary() {
+        return salary;
     }
 }

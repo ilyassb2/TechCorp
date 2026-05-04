@@ -19,13 +19,25 @@ public class Project {
     }
 
     public void workOneTurn() {
-        for (Employee e : team) {
-            progress += e.work();
-        }
-        if (progress > requiredWork) {
-            progress = requiredWork;
+    int totalBoost = 0;
+
+    for (Employee e : team) {
+        progress += e.work();
+
+        // Check for ProjectManager
+        if (e instanceof ProjectManager) {
+            ProjectManager pm = (ProjectManager) e;
+            totalBoost += pm.boost();
         }
     }
+
+    // Apply manager boost
+    progress += totalBoost;
+
+    if (progress > requiredWork) {
+        progress = requiredWork;
+    }
+}
 
     public boolean isFinished() {
         return progress >= requiredWork;

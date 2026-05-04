@@ -24,6 +24,8 @@ public class GameEngine {
 
             int choice = ui.readMenuChoice();
             handleChoice(choice);
+            company.paySalaries();
+            checkGameOver();
 
             turn++;
         }
@@ -31,11 +33,18 @@ public class GameEngine {
 
     private void handleChoice(int choice) {
         switch (choice) {
-            case 1 -> ui.showCompanyStatus(company);
-            case 2 -> workOnProjects();
-            case 3 -> running = false;
-            default -> ui.showMessage("Invalid option");
-        }
+    case 1:
+        ui.showCompanyStatus(company);
+        break;
+    case 2:
+        workOnProjects();
+        break;
+    case 3:
+        running = false;
+        break;
+    default:
+        ui.showMessage("Invalid option");
+}
     }
 
     private void workOnProjects() {
@@ -44,4 +53,32 @@ public class GameEngine {
         }
         ui.showMessage("Worked one turn");
     }
+    private boolean allProjectsFinished() {
+    if (company.getProjects().isEmpty()) {
+        return false;
+    }
+
+    for (Project p : company.getProjects()) {
+        if (!p.isFinished()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+private void checkGameOver() {
+
+    // Lose condition
+    if (company.getCash() < 0) {
+        ui.showMessage("You went bankrupt! Game over.");
+        running = false;
+        return;
+    }
+
+    // Win condition
+    if (allProjectsFinished()) {
+        ui.showMessage("All projects completed! You win!");
+        running = false;
+    }
+}
 }
