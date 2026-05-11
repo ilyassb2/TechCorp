@@ -3,6 +3,9 @@ package com.example.techcorp.engine;
 import com.example.techcorp.domain.Company;
 import com.example.techcorp.domain.Project;
 import com.example.techcorp.ui.ConsoleUI;
+import com.example.techcorp.events.*;
+import java.util.Random;
+import com.example.techcorp.domain.*;
 
 public class GameEngine {
 
@@ -10,6 +13,7 @@ public class GameEngine {
     private ConsoleUI ui;
     private boolean running = true;
     private int turn = 1;
+    private Random random = new Random();
 
     public GameEngine(Company company, ConsoleUI ui) {
         this.company = company;
@@ -25,6 +29,7 @@ public class GameEngine {
             int choice = ui.readMenuChoice();
             handleChoice(choice);
             company.paySalaries();
+            triggerRandomEvent();
             checkGameOver();
 
             turn++;
@@ -80,5 +85,48 @@ private void checkGameOver() {
         ui.showMessage("All projects completed! You win!");
         running = false;
     }
+}
+private void triggerRandomEvent() {
+
+    int chance = random.nextInt(100);
+
+    // 30% chance of event
+    if (chance < 30) {
+
+        GameEvent event;
+
+        if (random.nextBoolean()) {
+            event = new CrisisEvent();
+        } else {
+            event = new BonusEvent();
+        }
+
+        ui.showMessage("EVENT: " + event.getName());
+
+        if (event instanceof CrisisEvent && crisisPrevented()) {
+
+    ui.showMessage("SOC Analyst prevented the crisis!");
+
+} else {
+
+    event.apply(company);
+}
+    }
+}
+private boolean crisisPrevented() {
+
+    for (Employee e : company.getEmployees()) {
+
+        if (e instanceof SOCAnalyst) {
+
+            SOCAnalyst soc = (SOCAnalyst) e;
+
+            if (soc.preventIncident()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 }

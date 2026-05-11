@@ -24,6 +24,12 @@ public class Company {
     public void startProject(Project p) {
         projects.add(p);
     }
+    public void addCash(double amount) {
+    cash += amount;
+}
+public void reduceCash(double amount) {
+    cash -= amount;
+}
     public void paySalaries() {
     double total = 0;
 

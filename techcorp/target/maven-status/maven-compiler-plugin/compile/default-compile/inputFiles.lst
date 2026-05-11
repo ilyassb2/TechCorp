@@ -7,4 +7,7 @@
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/ProjectManager.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/SOCAnalyst.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/engine/GameEngine.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/BonusEvent.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/CrisisEvent.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/GameEvent.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/ui/ConsoleUI.java
