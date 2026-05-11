@@ -6,7 +6,10 @@ public class BonusEvent implements GameEvent {
 
     @Override
     public void apply(Company company) {
+
         company.addCash(12000);
+
+        System.out.println("Received investor funding: +12000");
     }
 
     @Override

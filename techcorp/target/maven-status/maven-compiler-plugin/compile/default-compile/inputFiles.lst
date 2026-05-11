@@ -10,4 +10,7 @@
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/BonusEvent.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/CrisisEvent.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/events/GameEvent.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/exceptions/EmployeeNotFoundException.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/exceptions/InsufficientFundsException.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/exceptions/InvalidRoleException.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/ui/ConsoleUI.java

@@ -3,10 +3,13 @@ com/example/techcorp/ui/ConsoleUI.class
 com/example/techcorp/engine/GameEngine.class
 com/example/techcorp/events/GameEvent.class
 com/example/techcorp/domain/Project.class
+com/example/techcorp/exceptions/EmployeeNotFoundException.class
 com/example/techcorp/domain/Company.class
+com/example/techcorp/exceptions/InsufficientFundsException.class
 com/example/techcorp/domain/Employee.class
 com/example/techcorp/domain/SOCAnalyst.class
 com/example/techcorp/domain/ProjectManager.class
+com/example/techcorp/exceptions/InvalidRoleException.class
 com/example/techcorp/domain/MLOpsEngineer.class
 com/example/techcorp/events/BonusEvent.class
 com/example/techcorp/domain/DataEngineer.class

@@ -9,10 +9,10 @@ public class Main {
 
         Company company = new Company("TechCorp", 55000);
 
-        Employee a = new DataEngineer("Anna", 5, 7000);
-        Employee b = new MLOpsEngineer("Leo", 6, 8000);
-        Employee c = new ProjectManager("Sara", 4, 9000);
-        Employee d = new SOCAnalyst("Nick", 5, 6500);
+        Employee a = new DataEngineer("Anna", 5, 3500);
+        Employee b = new MLOpsEngineer("Leo", 6, 4500);
+        Employee c = new ProjectManager("Sara", 4, 5000);
+        Employee d = new SOCAnalyst("Nick", 5, 3000);
 
         company.hire(a);
         company.hire(b);

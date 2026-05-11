@@ -6,7 +6,10 @@ public class CrisisEvent implements GameEvent {
 
     @Override
     public void apply(Company company) {
+
         company.reduceCash(15000);
+
+        System.out.println("Market losses: -15000");
     }
 
     @Override
