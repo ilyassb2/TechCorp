@@ -1,6 +1,8 @@
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/Main.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/TechCorpApplication.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Company.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/DataEngineer.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Difficulty.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Employee.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/MLOpsEngineer.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/domain/Project.java
@@ -14,3 +16,4 @@
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/exceptions/InsufficientFundsException.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/exceptions/InvalidRoleException.java
 /workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/ui/ConsoleUI.java
+/workspaces/TechCorp/techcorp/src/main/java/com/example/techcorp/web/GameController.java

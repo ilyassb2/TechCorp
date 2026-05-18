@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>TechCorp</title>
+</head>
+
+<body>
+
+<h1 th:text="${companyName}"></h1>
+
+<h2>Company Status</h2>
+
+<p>
+    Cash:
+    <span th:text="${cash}"></span>
+</p>
+
+<h2>Current Project</h2>
+
+<p>
+    Project:
+    <span th:text="${projectName}"></span>
+</p>
+
+<p>
+    Progress:
+    <span th:text="${projectProgress}"></span>
+    /
+    <span th:text="${requiredWork}"></span>
+</p>
+
+<h2>Employees</h2>
+
+<ul>
+    <li th:each="name : ${employeeNames}" th:text="${name}"></li>
+</ul>
+
+<br>
+
+<form th:action="@{/next-turn}" method="post">
+    <button type="submit">
+        Next Turn
+    </button>
+</form>
+
+</body>
+</html>

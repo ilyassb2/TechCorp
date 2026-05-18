@@ -16,17 +16,44 @@ public class Main {
 
         company.hire(a);
         company.hire(b);
+        company.hire(c);
         company.hire(d);
 
         Project p = new Project("Cybersecurity Infrastructure", 120);
+
         p.addEmployee(a);
         p.addEmployee(b);
+        p.addEmployee(c);
         p.addEmployee(d);
 
         company.startProject(p);
 
+        Company opponentCompany = new Company("DataNova", 50000);
+
+        Employee rivalA = new DataEngineer("Rival Data Engineer", 5, 3500);
+        Employee rivalB = new MLOpsEngineer("Rival MLOps Engineer", 5, 4000);
+
+        opponentCompany.hire(rivalA);
+        opponentCompany.hire(rivalB);
+
+        Project rivalProject = new Project("Cloud AI Platform", 160);
+
+        rivalProject.addEmployee(rivalA);
+        rivalProject.addEmployee(rivalB);
+
+        opponentCompany.startProject(rivalProject);
+
         ConsoleUI ui = new ConsoleUI();
-        GameEngine engine = new GameEngine(company, ui);
+
+        Difficulty difficulty = ui.askDifficulty();
+
+        GameEngine engine = new GameEngine(
+            company,
+            opponentCompany,
+            ui
+        );
+
+        engine.setDifficulty(difficulty);
 
         engine.start();
     }
