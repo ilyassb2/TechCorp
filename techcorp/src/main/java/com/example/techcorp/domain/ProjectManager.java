@@ -2,16 +2,24 @@ package com.example.techcorp.domain;
 
 public class ProjectManager extends Employee {
 
-    public ProjectManager(String name, int skill, double salary) {
+    public ProjectManager(
+            String name,
+            int skill,
+            double salary
+    ) {
         super(name, skill, salary);
     }
 
     @Override
     public int work() {
-        return skill;
+
+        return skill + 1;
+
     }
 
     public int boost() {
-        return 2;
+
+        return 5;
+
     }
 }

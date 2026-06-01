@@ -1,5 +1,7 @@
+com/example/techcorp/engine/GameSession.class
 com/example/techcorp/events/CrisisEvent.class
 com/example/techcorp/ui/ConsoleUI.class
+com/example/techcorp/engine/GameSession$1.class
 com/example/techcorp/engine/GameEngine.class
 com/example/techcorp/events/GameEvent.class
 com/example/techcorp/domain/Project.class
@@ -18,4 +20,3 @@ com/example/techcorp/domain/Difficulty.class
 com/example/techcorp/events/BonusEvent.class
 com/example/techcorp/domain/DataEngineer.class
 com/example/techcorp/Main.class
-com/example/techcorp/web/GameController$1.class

@@ -6,12 +6,18 @@ public class MLOpsEngineer extends Employee {
 
     private Random random = new Random();
 
-    public MLOpsEngineer(String name, int skill, double salary) {
+    public MLOpsEngineer(
+            String name,
+            int skill,
+            double salary
+    ) {
         super(name, skill, salary);
     }
 
     @Override
     public int work() {
-        return skill + random.nextInt(5); // variable performance
+
+        return skill + 3 + random.nextInt(4);
+
     }
 }
