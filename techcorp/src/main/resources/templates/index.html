@@ -7,42 +7,152 @@
 
 <body>
 
-<h1 th:text="${companyName}"></h1>
+<h1>TechCorp Management Game</h1>
 
-<h2>Company Status</h2>
+<div th:if="${!gameStarted}">
 
-<p>
-    Cash:
-    <span th:text="${cash}"></span>
-</p>
+    <h2>Choose Difficulty</h2>
 
-<h2>Current Project</h2>
+    <form th:action="@{/start-game}" method="post">
 
-<p>
-    Project:
-    <span th:text="${projectName}"></span>
-</p>
+        <select name="selectedDifficulty" required>
+            <option value="EASY">Easy</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HARD">Hard</option>
+        </select>
 
-<p>
-    Progress:
-    <span th:text="${projectProgress}"></span>
-    /
-    <span th:text="${requiredWork}"></span>
-</p>
+        <br><br>
 
-<h2>Employees</h2>
+        <button type="submit">Start Game</button>
 
-<ul>
-    <li th:each="name : ${employeeNames}" th:text="${name}"></li>
-</ul>
+    </form>
 
-<br>
+</div>
 
-<form th:action="@{/next-turn}" method="post">
-    <button type="submit">
-        Next Turn
-    </button>
-</form>
+<div th:if="${gameStarted}">
+
+    <h2>Difficulty:
+        <span th:text="${difficulty}"></span>
+    </h2>
+
+    <h2>Player Company</h2>
+
+    <p>
+        Company:
+        <span th:text="${companyName}"></span>
+    </p>
+
+    <p>
+        Cash:
+        <span th:text="${cash}"></span>
+    </p>
+
+    <p>
+        <strong th:text="${message}"></strong>
+    </p>
+
+    <h2 th:text="${gameResult}"></h2>
+
+    <h3>Current Project</h3>
+
+    <p>
+        Project:
+        <span th:text="${projectName}"></span>
+    </p>
+
+    <p>
+        Progress:
+        <span th:text="${projectProgress}"></span>
+        /
+        <span th:text="${requiredWork}"></span>
+    </p>
+
+    <h3>Employees</h3>
+
+    <ul>
+        <li th:each="employee : ${employees}">
+            <span th:text="${employee.getName()}"></span>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>Opponent Company</h2>
+
+    <p>
+        Company:
+        <span th:text="${opponentName}"></span>
+    </p>
+
+    <p>
+        Cash:
+        <span th:text="${opponentCash}"></span>
+    </p>
+
+    <h3>Opponent Project</h3>
+
+    <p>
+        Project:
+        <span th:text="${opponentProjectName}"></span>
+    </p>
+
+    <p>
+        Progress:
+        <span th:text="${opponentProjectProgress}"></span>
+        /
+        <span th:text="${opponentRequiredWork}"></span>
+    </p>
+
+    <h3>Opponent Employees</h3>
+
+    <ul>
+        <li th:each="employee : ${opponentEmployees}">
+            <span th:text="${employee.getName()}"></span>
+        </li>
+    </ul>
+
+    <hr>
+
+    <div th:if="${!gameOver}">
+
+        <h2>Hire Employee</h2>
+
+        <form th:action="@{/hire}" method="post">
+
+            <label>Name:</label>
+            <input type="text" name="name" required>
+
+            <br><br>
+
+            <label>Role:</label>
+            <select name="role" required>
+                <option value="DataEngineer">Data Engineer</option>
+                <option value="MLOpsEngineer">MLOps Engineer</option>
+                <option value="SOCAnalyst">SOC Analyst</option>
+                <option value="ProjectManager">Project Manager</option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">Hire Employee</button>
+
+        </form>
+
+        <br>
+
+        <form th:action="@{/next-turn}" method="post">
+            <button type="submit">Next Turn</button>
+        </form>
+
+    </div>
+
+    <br>
+
+    <form th:action="@{/restart}" method="post">
+        <button type="submit">Restart Game</button>
+    </form>
+
+</div>
 
 </body>
 </html>

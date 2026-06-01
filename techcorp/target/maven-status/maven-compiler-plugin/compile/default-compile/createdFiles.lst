@@ -18,3 +18,4 @@ com/example/techcorp/domain/Difficulty.class
 com/example/techcorp/events/BonusEvent.class
 com/example/techcorp/domain/DataEngineer.class
 com/example/techcorp/Main.class
+com/example/techcorp/web/GameController$1.class
