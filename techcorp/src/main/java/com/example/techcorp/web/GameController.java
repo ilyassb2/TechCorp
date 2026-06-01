@@ -2,12 +2,15 @@ package com.example.techcorp.web;
 
 import com.example.techcorp.domain.*;
 import com.example.techcorp.events.*;
+import com.example.techcorp.exceptions.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Controller
@@ -27,16 +30,18 @@ public class GameController {
     private String message = "";
     private String gameResult = "";
 
+    private List<String> eventLog = new ArrayList<>();
+
     private Random random = new Random();
+
+    private int opponentFundingUsed = 0;
 
     public GameController() {
     }
 
     @GetMapping("/")
     public String home(Model model) {
-
         addGameData(model);
-
         return "index";
     }
 
@@ -45,7 +50,6 @@ public class GameController {
             @RequestParam String selectedDifficulty,
             Model model
     ) {
-
         difficulty = Difficulty.valueOf(selectedDifficulty);
 
         setupGame();
@@ -54,9 +58,12 @@ public class GameController {
         gameOver = false;
         message = "Game started on " + difficulty + " difficulty.";
         gameResult = "";
+        opponentFundingUsed = 0;
+
+        eventLog.clear();
+        addEvent("Game started on " + difficulty + " difficulty.");
 
         addGameData(model);
-
         return "index";
     }
 
@@ -73,14 +80,20 @@ public class GameController {
         company.hire(a);
         company.hire(b);
 
-        project = new Project("Cybersecurity Infrastructure", 120);
+        project = new Project(
+            "Cybersecurity Infrastructure",
+            getPlayerRequiredWork()
+        );
 
         project.addEmployee(a);
         project.addEmployee(b);
 
         company.startProject(project);
 
-        opponentCompany = new Company("EVCorp", getOpponentStartingCash());
+        opponentCompany = new Company(
+            "EVCorp",
+            getOpponentStartingCash()
+        );
 
         Employee rivalA = new DataEngineer("Rival Data Engineer", 5, 3500);
         Employee rivalB = new MLOpsEngineer("Rival MLOps Engineer", 5, 4000);
@@ -113,26 +126,26 @@ public class GameController {
             opponentAutoHire();
 
             message = "Turn completed.";
+            addEvent("Turn completed.");
 
-            boolean playerEventTriggered =
-                triggerRandomEvent();
+            boolean playerEventTriggered = triggerRandomEvent();
 
-            boolean opponentEventTriggered =
-                triggerOpponentRandomEvent();
+            boolean opponentEventTriggered = triggerOpponentRandomEvent();
 
-            if (!playerEventTriggered &&
-                    !opponentEventTriggered) {
-
-                message =
-                    message +
-                    " No major events this turn.";
-            }
+            handleOpponentEmergencyFunding();
 
             checkGameState();
+
+            if (!playerEventTriggered &&
+                    !opponentEventTriggered &&
+                    message.equals("Turn completed.")) {
+
+                message = message + " No major events this turn.";
+                addEvent("No major events this turn.");
+            }
         }
 
         addGameData(model);
-
         return "index";
     }
 
@@ -145,17 +158,48 @@ public class GameController {
 
         if (gameStarted && !gameOver) {
 
-            Employee employee = createEmployee(name, role);
+            try {
 
-            if (employee != null) {
+                Employee employee = createEmployee(name, role);
+
                 hireEmployee(employee);
-            } else {
-                message = "Invalid role selected.";
+
+            } catch (InsufficientFundsException e) {
+
+                message = "ERROR: " + e.getMessage();
+                addEvent(message);
+
+            } catch (InvalidRoleException e) {
+
+                message = "ERROR: " + e.getMessage();
+                addEvent(message);
             }
         }
 
         addGameData(model);
+        return "index";
+    }
 
+    @PostMapping("/fire")
+    public String fireEmployeeFromForm(
+            @RequestParam int employeeIndex,
+            Model model
+    ) {
+
+        if (gameStarted && !gameOver) {
+
+            try {
+
+                fireEmployee(employeeIndex);
+
+            } catch (EmployeeNotFoundException e) {
+
+                message = "ERROR: " + e.getMessage();
+                addEvent(message);
+            }
+        }
+
+        addGameData(model);
         return "index";
     }
 
@@ -166,9 +210,10 @@ public class GameController {
         gameOver = false;
         message = "";
         gameResult = "";
+        opponentFundingUsed = 0;
+        eventLog.clear();
 
         addGameData(model);
-
         return "index";
     }
 
@@ -180,14 +225,30 @@ public class GameController {
                 return 90000;
 
             case HARD:
-                return 65000;
+                return 55000;
 
             default:
                 return 80000;
         }
     }
 
-    private Employee createEmployee(String name, String role) {
+    private int getPlayerRequiredWork() {
+
+        switch (difficulty) {
+
+            case EASY:
+                return 150;
+
+            case HARD:
+                return 200;
+
+            default:
+                return 175;
+        }
+    }
+
+    private Employee createEmployee(String name, String role)
+            throws InvalidRoleException {
 
         if (role.equals("DataEngineer")) {
             return new DataEngineer(name, 5, 3500);
@@ -205,22 +266,59 @@ public class GameController {
             return new ProjectManager(name, 4, 5000);
         }
 
-        return null;
+        throw new InvalidRoleException(
+            "Invalid employee role selected!"
+        );
     }
 
-    private void hireEmployee(Employee employee) {
+    private void hireEmployee(Employee employee)
+            throws InsufficientFundsException {
 
         double minimumCash = 10000;
 
         if (company.getCash() < minimumCash) {
-            message = "Not enough cash to hire.";
-            return;
+
+            throw new InsufficientFundsException(
+                "Not enough cash to hire new employee!"
+            );
         }
 
         company.hire(employee);
         project.addEmployee(employee);
 
         message = employee.getName() + " hired successfully.";
+        addEvent(message);
+    }
+
+    private void fireEmployee(int employeeIndex)
+            throws EmployeeNotFoundException {
+
+        if (company.getEmployees().isEmpty()) {
+
+            throw new EmployeeNotFoundException(
+                "No employees to fire!"
+            );
+        }
+
+        if (employeeIndex < 0 ||
+                employeeIndex >= company.getEmployees().size()) {
+
+            throw new EmployeeNotFoundException(
+                "Invalid employee selected!"
+            );
+        }
+
+        Employee employee =
+            company.getEmployees().get(employeeIndex);
+
+        company.getEmployees().remove(employee);
+
+        for (Project p : company.getProjects()) {
+            p.getTeam().remove(employee);
+        }
+
+        message = employee.getName() + " was fired.";
+        addEvent(message);
     }
 
     private void opponentAutoHire() {
@@ -261,44 +359,76 @@ public class GameController {
             opponentCompany.hire(employee);
             opponentProject.addEmployee(employee);
 
-            message =
-                message +
-                " EVCorp hired a new employee.";
+            String eventMessage =
+                "EVCorp hired a new employee.";
+
+            message = message + " " + eventMessage;
+            addEvent(eventMessage);
         }
+    }
+
+    private int getPlayerEventChance() {
+
+        int eventChance = 15;
+
+        if (company.getCash() < 20000) {
+            eventChance += 10;
+        }
+
+        if (company.getEmployees().size() > 4) {
+            eventChance += 10;
+        }
+
+        return eventChance;
     }
 
     private boolean triggerRandomEvent() {
 
         int chance = random.nextInt(100);
 
-        if (chance < 30) {
+        if (chance < getPlayerEventChance()) {
 
             GameEvent event;
 
-            if (random.nextBoolean()) {
+            if (company.getCash() < 20000) {
+
+                event = new BonusEvent();
+
+            } else if (company.getEmployees().size() > 4) {
+
                 event = new CrisisEvent();
+
+            } else if (random.nextBoolean()) {
+
+                event = new CrisisEvent();
+
             } else {
+
                 event = new BonusEvent();
             }
 
             if (event instanceof CrisisEvent
                     && crisisPrevented()) {
 
-                message =
-                    message +
-                    " EVENT: " +
+                String eventMessage =
+                    "Player Event: " +
                     event.getName() +
                     " was prevented by SOC Analyst.";
+
+                message = message + " " + eventMessage;
+                addEvent(eventMessage);
 
             } else {
 
                 event.apply(company);
 
-                message =
-                    message +
-                    " EVENT: " +
+                String eventMessage =
+                    "Player Event: " +
                     event.getName() +
                     " affected TechCorp.";
+
+                message = message + " " + eventMessage;
+                addEvent(eventMessage);
             }
 
             return true;
@@ -318,11 +448,11 @@ public class GameController {
                 break;
 
             case HARD:
-                eventChance = 35;
+                eventChance = 25;
                 break;
 
             default:
-                eventChance = 25;
+                eventChance = 20;
                 break;
         }
 
@@ -332,19 +462,32 @@ public class GameController {
 
             GameEvent event;
 
-            if (random.nextBoolean()) {
+            if (opponentCompany.getCash() < 15000) {
+
+                event = new BonusEvent();
+
+            } else if (opponentCompany.getEmployees().size() > 4) {
+
                 event = new CrisisEvent();
+
+            } else if (random.nextBoolean()) {
+
+                event = new CrisisEvent();
+
             } else {
+
                 event = new BonusEvent();
             }
 
             event.apply(opponentCompany);
 
-            message =
-                message +
-                " OPPONENT EVENT: " +
+            String eventMessage =
+                "Opponent Event: " +
                 event.getName() +
                 " affected EVCorp.";
+
+            message = message + " " + eventMessage;
+            addEvent(eventMessage);
 
             return true;
         }
@@ -370,24 +513,36 @@ public class GameController {
         return false;
     }
 
+    private void handleOpponentEmergencyFunding() {
+
+        if (opponentCompany.getCash() < 10000 &&
+                opponentFundingUsed < 1) {
+
+            opponentCompany.addCash(
+                getOpponentEmergencyFunding()
+            );
+
+            opponentFundingUsed++;
+
+            String eventMessage =
+                "EVCorp received emergency funding.";
+
+            message = message + " " + eventMessage;
+            addEvent(eventMessage);
+        }
+    }
+
     private void checkGameState() {
 
-        if (project.isFinished()) {
+        if (company.getCash() < 0 &&
+                opponentCompany.getCash() < 0) {
 
             gameOver = true;
 
             gameResult =
-                "You completed the project before EVCorp. You win!";
+                "Both companies went bankrupt. No winner.";
 
-            return;
-        }
-
-        if (opponentProject.isFinished()) {
-
-            gameOver = true;
-
-            gameResult =
-                "EVCorp completed its project first. You lose.";
+            addEvent(gameResult);
 
             return;
         }
@@ -397,20 +552,54 @@ public class GameController {
             gameOver = true;
 
             gameResult =
-                "Company went bankrupt. Game Over.";
+                "TechCorp went bankrupt. EVCorp wins.";
+
+            addEvent(gameResult);
 
             return;
         }
 
-        if (opponentCompany.getCash() < 10000) {
+        if (opponentCompany.getCash() < 0) {
 
-            opponentCompany.addCash(
-                getOpponentEmergencyFunding()
-            );
+            gameOver = true;
 
-            message =
-                message +
-                " EVCorp received emergency funding.";
+            gameResult =
+                "EVCorp went bankrupt. TechCorp wins.";
+
+            addEvent(gameResult);
+
+            return;
+        }
+
+        if (project.isFinished()) {
+
+            gameOver = true;
+
+            gameResult =
+                "TechCorp completed the project first. TechCorp wins!";
+
+            addEvent(gameResult);
+
+            return;
+        }
+
+        if (opponentProject.isFinished()) {
+
+            gameOver = true;
+
+            gameResult =
+                "EVCorp completed its project first. EVCorp wins.";
+
+            addEvent(gameResult);
+        }
+    }
+
+    private void addEvent(String event) {
+
+        eventLog.add(0, event);
+
+        if (eventLog.size() > 8) {
+            eventLog.remove(eventLog.size() - 1);
         }
     }
 
@@ -434,13 +623,13 @@ public class GameController {
         switch (difficulty) {
 
             case EASY:
-                return 145;
+                return 170;
 
             case HARD:
-                return 115;
+                return 180;
 
             default:
-                return 135;
+                return 175;
         }
     }
 
@@ -511,6 +700,7 @@ public class GameController {
         model.addAttribute("difficulty", difficulty);
         model.addAttribute("message", message);
         model.addAttribute("gameResult", gameResult);
+        model.addAttribute("eventLog", eventLog);
 
         if (gameStarted) {
 

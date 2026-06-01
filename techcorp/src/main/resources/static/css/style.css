@@ -1,0 +1,273 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Nunito", "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+    color: #333;
+    background: linear-gradient(135deg, #c8344f 0%, #7a2d82 100%);
+}
+
+.app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+}
+
+.sidebar {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 28px 22px;
+    color: white;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 26px;
+    letter-spacing: 1px;
+}
+
+.event-log {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.event-log li {
+    background: rgba(255, 255, 255, 0.18);
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.main-content {
+    padding: 34px 46px;
+}
+
+h1 {
+    color: white;
+    font-size: 42px;
+    margin: 0 0 24px 0;
+    letter-spacing: 0.5px;
+}
+
+.top-info {
+    color: white;
+    font-size: 22px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.game-result {
+    font-weight: 800;
+}
+
+.message-popup {
+    background: rgba(255, 255, 255, 0.86);
+    color: #333;
+    padding: 12px 18px;
+    border-radius: 999px;
+    width: fit-content;
+    max-width: 850px;
+    margin: 0 auto 18px auto;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.18);
+    font-weight: 700;
+}
+
+.battle-board {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 530px;
+    max-width: 1080px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.25);
+}
+
+.company-card {
+    padding: 42px 54px;
+    text-align: center;
+    position: relative;
+}
+
+.player-card {
+    background: rgba(255, 232, 238, 0.78);
+}
+
+.opponent-card {
+    background: rgba(198, 122, 153, 0.72);
+}
+
+.opponent-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(60, 35, 70, 0.12);
+    pointer-events: none;
+}
+
+.company-card h2 {
+    font-size: 38px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.company-card h3 {
+    margin: 10px 0 24px 0;
+    font-size: 22px;
+}
+
+.cash {
+    font-size: 66px;
+    color: #c93462;
+    line-height: 1;
+    margin-top: 18px;
+}
+
+.label {
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 30px;
+}
+
+.project-box {
+    background: #c93462;
+    color: white;
+    border-radius: 8px;
+    padding: 18px;
+    max-width: 280px;
+    margin: 0 auto 26px auto;
+}
+
+.project-box p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.progress-text {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.company-card h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.employees {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 110px;
+    overflow-y: auto;
+}
+
+.employees li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+.actions-panel {
+    margin: 28px auto 0 auto;
+    max-width: 1080px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.actions-panel form,
+.start-panel form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+input,
+select {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 16px;
+    min-width: 170px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.92);
+}
+
+button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #555;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    background: white;
+}
+
+.primary-action {
+    background: #c93462;
+    color: white;
+}
+
+.secondary-button {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.start-panel {
+    background: rgba(255, 255, 255, 0.75);
+    max-width: 520px;
+    margin: 120px auto;
+    padding: 40px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.22);
+}
+
+.start-panel h2 {
+    font-size: 34px;
+    margin-top: 0;
+}
+
+@media (max-width: 950px) {
+    .app {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: 2;
+    }
+
+    .battle-board {
+        grid-template-columns: 1fr;
+    }
+
+    .main-content {
+        padding: 24px;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+}
